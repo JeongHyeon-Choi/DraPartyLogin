@@ -8,13 +8,13 @@
 	<TextView 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:text="revise text"
+	    android:text="계정 셋팅"
 	    android:textSize="30dp"
 	    android:textStyle="bold"
 	    android:layout_gravity="center"
 	    />
 	<EditText
-	    android:id="@+id/edit"
+	    android:id="@+id/dia_edit"
 	    android:padding="5dp"
 	    android:layout_margin="5dp"
 	    android:layout_width="250dp"
@@ -27,16 +27,22 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <Button 
-            android:id="@+id/submit"
+            android:id="@+id/dia_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Ok"/>
+            android:layout_weight="7"
+            android:text="이름 바꾸기"/>
         <Button 
-            android:id="@+id/cancle"
+            android:id="@+id/dia_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:text="취소"/>
+         <Button 
+            android:id="@+id/dia_del"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="cancle"/>
+            android:text="삭제"/>
     </LinearLayout>
 </LinearLayout>

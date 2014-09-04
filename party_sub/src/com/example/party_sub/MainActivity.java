@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.party_sub.renameDialog.delListener;
 import com.example.party_sub.renameDialog.okListener;
 
 public class MainActivity extends Activity {
@@ -71,6 +72,12 @@ public class MainActivity extends Activity {
 									String file_name = check_id() + ".dat";
 									FileInputStream fis = new FileInputStream(
 											file2);
+									while(new File(Environment.getExternalStorageDirectory()
+													+ "/Android/data/com.patigames.dragonparty/"
+													+ file_name).exists()){
+										file_name = "new_" + file_name;
+									}
+									
 									FileOutputStream newfos = new FileOutputStream(
 											Environment
 													.getExternalStorageDirectory()
@@ -103,7 +110,7 @@ public class MainActivity extends Activity {
 			public boolean onLongClick(View v) {
 				listadp.add("aa");
 				listadp.notifyDataSetChanged();
-				return false;
+				return true;
 			}
 		});
 		
@@ -148,7 +155,8 @@ public class MainActivity extends Activity {
 		if (f_id.isDirectory() && f_id.canRead() && f_id.canWrite()) {
 			File[] id_list = f_id.listFiles();
 			int i = id_list.length;
-			for (int j = 0; j < i; j++) {
+			arylist.clear();
+			for (int j = 1; j < i; j++) {
 				arylist.add(id_list[j].getName());
 			}
 		}
@@ -182,6 +190,21 @@ public class MainActivity extends Activity {
 		File del_file = new File(Environment.getExternalStorageDirectory()+ "/Android/data/com.patigames.dragonparty/files/accountLog.dat");
 		if(del_file != null && del_file.isFile() && del_file.canWrite()){
 			del_file.delete();
+		}
+	}
+	void del_login(String arg1,int index){
+		File del_file = new File(Environment.getExternalStorageDirectory()+ "/Android/data/com.patigames.dragonparty/"+arg1);
+		if(del_file != null && del_file.isFile() && del_file.canWrite()){
+			del_file.delete();
+//			ArrayList<String> tempArrayList = new ArrayList<String>();
+			arylist.remove(index);
+			listadp.notifyDataSetChanged();
+//			for (String string : arylist) {
+//				tempArrayList.add(string);
+//			}
+//			arylist.clear();
+//			arylist = tempArrayList;
+			
 		}
 	}
 	
@@ -235,7 +258,11 @@ public class MainActivity extends Activity {
 //				convertView = inflater.inflate(mListLayout, parent);
 			}
 			final int positionInt = position;
-			((Button) convertView.findViewById(R.id.start_btn)).setOnClickListener(new OnClickListener() {
+//			if(positionInt == 0){
+//				convertView.setVisibility(View.GONE);
+//			}
+			Button btn = (Button) convertView.findViewById(R.id.start_btn);
+			btn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					if (positionInt != 0) {
@@ -248,7 +275,8 @@ public class MainActivity extends Activity {
 					}
 				}
 			});
-			((TextView) convertView.findViewById(R.id.item)).setText(mcategory.get(positionInt));
+			TextView tv = (TextView) convertView.findViewById(R.id.item);
+			tv.setText(mcategory.get(positionInt));
 			convertView.setOnLongClickListener(new OnLongClickListener() {
 				
 				@Override
@@ -260,6 +288,13 @@ public class MainActivity extends Activity {
 						public void click() {
 							rename = renameDialog.getEditStr();
 							rename_login(mcategory.get(positionInt), rename, positionInt);
+						}
+					},
+					new delListener() {
+						
+						@Override
+						public void click() {
+							del_login(mcategory.get(positionInt), positionInt);					
 						}
 					});
 					rd.show();
@@ -283,6 +318,8 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		get_id();
+		listadp.notifyDataSetChanged();
 	}
 	
 	@Override
