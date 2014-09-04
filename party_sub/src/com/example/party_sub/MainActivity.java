@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.party_sub.renameDialog.okListener;
+
 public class MainActivity extends Activity {
 	private Intent intent;
 	public Button add_btn, del_btn;
@@ -28,6 +31,7 @@ public class MainActivity extends Activity {
 	public listAdapter listadp;
 	public File dra_root;
 	public ArrayList<String> arylist = new ArrayList<String>();
+	String rename = new String();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -158,8 +162,7 @@ public class MainActivity extends Activity {
 				FileInputStream fis = new FileInputStream(
 						login_file);
 				FileOutputStream newfos = new FileOutputStream(
-						Environment
-								.getExternalStorageDirectory()
+						Environment.getExternalStorageDirectory()
 								+ "/Android/data/com.patigames.dragonparty/files/accountLog.dat");
 				int readcount = 0;
 				byte[] buffer = new byte[1024];
@@ -180,6 +183,15 @@ public class MainActivity extends Activity {
 		if(del_file != null && del_file.isFile() && del_file.canWrite()){
 			del_file.delete();
 		}
+	}
+	
+	void rename_login(String arg1, String arg2, int index){
+		File target_file = new File(Environment.getExternalStorageDirectory()+ "/Android/data/com.patigames.dragonparty/"+arg1);
+		File rename_file = new File(Environment.getExternalStorageDirectory()+ "/Android/data/com.patigames.dragonparty/"+arg2+".dat");
+		
+		target_file.renameTo(rename_file);
+		
+		arylist.set(index, arg2+".dat");
 	}
 	
 	public class listAdapter extends ArrayAdapter<String> {
@@ -229,7 +241,10 @@ public class MainActivity extends Activity {
 					if (positionInt != 0) {
 						Log.d("item", mcategory.get(positionInt));
 						change_login(mcategory.get(positionInt));
+						ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+						am.restartPackage("com.patigames.dragonparty");
 						startActivity(intent);
+						finish();
 					}
 				}
 			});
@@ -238,6 +253,16 @@ public class MainActivity extends Activity {
 				
 				@Override
 				public boolean onLongClick(View v) {
+
+					final renameDialog rd = new renameDialog(getContext(), new okListener() {
+						
+						@Override
+						public void click() {
+							rename = renameDialog.getEditStr();
+							rename_login(mcategory.get(positionInt), rename, positionInt);
+						}
+					});
+					rd.show();
 //					if (positionInt != 0) {
 //						Log.d("item", mcategory.get(positionInt));
 //						change_login(mcategory.get(positionInt));
