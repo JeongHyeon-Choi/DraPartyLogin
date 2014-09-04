@@ -108,8 +108,11 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public boolean onLongClick(View v) {
-				listadp.add("aa");
-				listadp.notifyDataSetChanged();
+//				listadp.add("aa");
+//				listadp.notifyDataSetChanged();
+				ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+				am.restartPackage("com.patigames.dragonparty");
+				startActivity(intent);
 				return true;
 			}
 		});
@@ -265,14 +268,14 @@ public class MainActivity extends Activity {
 			btn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (positionInt != 0) {
+//					if (positionInt != 0) {
 						Log.d("item", mcategory.get(positionInt));
 						change_login(mcategory.get(positionInt));
 						ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 						am.restartPackage("com.patigames.dragonparty");
 						startActivity(intent);
 						finish();
-					}
+//					}
 				}
 			});
 			TextView tv = (TextView) convertView.findViewById(R.id.item);
