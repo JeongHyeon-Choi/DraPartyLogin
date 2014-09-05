@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 		dra_root = new File(Environment.getExternalStorageDirectory()+ "/Android/data/com.patigames.dragonparty/files");
 		// File ff = new File(Environment.getExternalStorageDirectory()+"");
 //		arylist = get_id();
-		get_id();
+		set_id();
 		listadp = new listAdapter(this, R.layout.list_item, arylist);
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		lv.setAdapter(listadp);
@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
 //		}
 //		return null;
 //	}
-	void get_id() {
+	void set_id() {
 		File f_id = new File(Environment.getExternalStorageDirectory()
 				+ "/Android/data/com.patigames.dragonparty");
 		if (f_id.isDirectory() && f_id.canRead() && f_id.canWrite()) {
@@ -321,7 +321,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		get_id();
+		set_id();
 		listadp.notifyDataSetChanged();
 	}
 	
