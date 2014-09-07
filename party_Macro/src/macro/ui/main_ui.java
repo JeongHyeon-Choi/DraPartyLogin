@@ -83,9 +83,9 @@ public class main_ui extends JFrame{
 	
 	public main_ui() {
 		
-		  try {
-	            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-	        }catch(Exception ee) {}
+//		  try {
+//	            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//	        }catch(Exception ee) {}
 		  
 		Container mContainer = getContentPane();
 		JMenuBar mb = new JMenuBar();
@@ -376,42 +376,42 @@ public class main_ui extends JFrame{
 					th_charg1 = new Thread(mMethod.getCharggacha());
 					th_charg1.start();
 				} else {
-					th_charg1.interrupt();
+					th_charg1.stop();
 				}
 			} else if (cmd.equals("충전X2")) {
 				if (isRunable(Charg2)) {
 					th_charg2 = new Thread(mMethod.getCharggacha());
 					th_charg2.start();
 				} else {
-					th_charg2.interrupt();
+					th_charg2.stop();
 				}
 			} else if (cmd.equals("충전X3")) {
 				if (isRunable(Charg3)) {
 					th_charg3 = new Thread(mMethod.getCharggacha());
 					th_charg3.start();
 				} else {
-					th_charg3.interrupt();
+					th_charg3.stop();
 				}
 			} else if (cmd.equals("노멀")) {
 				if (isRunable(Nomal)) {
 					th_nomal = new Thread(mMethod.getNomalgacha());
 					th_nomal.start();
 				} else {
-					th_nomal.interrupt();
+					th_nomal.stop();
 				}
 			} else if (cmd.equals("강화")) {
 				if (isRunable(Enchance)) {
 					th_enchance = new Thread(mMethod.getEvolgacha());
 					th_enchance.start();
 				} else {
-					th_enchance.interrupt();
+					th_enchance.stop();
 				}
 			} else if (cmd.equals("선물")) {
 				if (isRunable(Present)) {
 					th_present = new Thread(mMethod.getPresnet());
 					th_present.start();
 				} else {
-					th_present.interrupt();
+					th_present.stop();
 				}
 			}
 		}
