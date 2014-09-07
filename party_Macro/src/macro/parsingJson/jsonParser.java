@@ -1,11 +1,7 @@
 package macro.parsingJson;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import macro.method.method;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -50,13 +46,13 @@ public class jsonParser {
 		return ParseString;
 	}
 	
-	public String[] getEvolJson(){
+	public String[] getEvolJson(method evolmethod){
 		String TargetEvol = "ERR";
 		String BaseId = "";
 		for (int i = 0; i < jar.size(); i++) {
 			if( isMP((String) ((JSONObject) jar.get(i)).get("cardID"))) {
 				BaseId = (String) ((JSONObject) jar.get(i)).get("traCardID");
-				 ParseString = test.evolcheck(BaseId);
+				 ParseString = evolmethod.evolcheck(BaseId);
 				 TargetEvol = EvoljsonParser(ParseString.substring(1));
 				 if(TargetEvol.equals("ERR")){
 					 continue;
