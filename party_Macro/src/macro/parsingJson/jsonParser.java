@@ -18,7 +18,11 @@ public class jsonParser {
 
 		Object obj = JSONValue.parse(str);
 		JSONObject oo = (JSONObject) obj;
-		jar = (JSONArray) ((JSONObject) oo.get("result")).get("tra_card");
+		try {
+			jar = (JSONArray) ((JSONObject) oo.get("result")).get("tra_card");
+		} catch (Exception e) {
+			return ;
+		}
 	}
 
 	public String getSalesJson() {

@@ -312,7 +312,7 @@ public class main_ui extends JFrame{
 //						tmp.split(":spilt");
 						mHeaderArea.setText(tmp.split(":split:")[0]);
 						mCardArea.setText(tmp.split(":split:")[1]);
-						
+						setTitle(file.getName());
 					} catch( IOException IOe ){
 						JDialog dialog = new JDialog( main_ui.this, "Error", true );
 						dialog.setVisible(true);
