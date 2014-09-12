@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Base64.Encoder;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -19,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -28,16 +28,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.sun.javafx.scene.layout.region.Margins.Converter;
-
-import sun.nio.cs.ext.DoubleByte.Encoder_EUC_SIM;
-
 import macro.method.SetConsole;
 import macro.method.method;
+import macro.packet.packet;
+import macro.packet.packet.selectRoomIdListener;
 
 public class main_ui extends JFrame{
 	/**
@@ -67,6 +64,11 @@ public class main_ui extends JFrame{
 	JButton Nomal = new JButton("노멀");
 	JButton Enchance = new JButton("강화");
 	JButton Present = new JButton("선물");
+	
+	JLabel RoomTF = new JLabel("roomID");
+	JButton RoomInfo = new JButton("방정보");
+	
+	JTextField InputRoom = new JTextField();
 	
 	Thread th_charg1;
 	Thread th_charg2;
@@ -100,15 +102,16 @@ public class main_ui extends JFrame{
 		btn_disable();
 		
 		pack();
-		setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), 
-				(int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 4));
+//		setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2), 
+//				(int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 4));
+		setSize(600,400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 	
 	JPanel setMacromJPanel(){
 		JPanel mJPanel = new JPanel();
-		mJPanel.setLayout(new GridLayout(8, 1));
+		mJPanel.setLayout(new GridLayout(10, 1));
 		
 		
 		Charg1 = new JButton("충전X1");
@@ -117,6 +120,9 @@ public class main_ui extends JFrame{
 		Nomal = new JButton("노멀");
 		Enchance = new JButton("강화");
 		Present = new JButton("선물");
+		
+		RoomTF = new JLabel("roomID",JLabel.CENTER);
+		RoomInfo = new JButton("방정보");
 
 		Charg1.addActionListener(mMacroActionListener);
 		Charg2.addActionListener(mMacroActionListener);
@@ -124,6 +130,26 @@ public class main_ui extends JFrame{
 		Nomal.addActionListener(mMacroActionListener);
 		Enchance.addActionListener(mMacroActionListener);
 		Present.addActionListener(mMacroActionListener);
+		
+		RoomInfo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				packet pp = new packet();
+				try {
+					pp.Start(new selectRoomIdListener() {
+						@Override
+						public void select(String str) {
+							InputRoom.setText(str);
+							RoomTF.setText(str);
+						}
+					} , mMethod.getContent().get(0));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
 		
 		JButton set_btn = new JButton("셋팅");
 		set_btn.setForeground(Color.RED);
@@ -146,6 +172,8 @@ public class main_ui extends JFrame{
 		mJPanel.add(Nomal);
 		mJPanel.add(Enchance);
 		mJPanel.add(Present);
+		mJPanel.add(RoomTF);
+		mJPanel.add(RoomInfo);
 		
 		return mJPanel; 
 	}
@@ -207,7 +235,7 @@ public class main_ui extends JFrame{
 		cardList = new JList<String>(cardListModel);
 //		cardList = new JList<>(a);
 		
-		final JTextField InputRoom = new JTextField();
+		InputRoom = new JTextField();
 		JRadioButton skill1 = new JRadioButton("1 : 카드화 전체");
 		JRadioButton skill2 = new JRadioButton("2 : 카드화 2");
 		JRadioButton skill3 = new JRadioButton("3 : 카드화 3");
@@ -459,6 +487,10 @@ public class main_ui extends JFrame{
 		Enchance.setEnabled(true);
 		Present.setEnabled(true);
 		Send.setEnabled(true);
+		if(mMethod.getTitle().get(5).equals("deviceID") && mMethod.getContent().get(5).equals("000000000000000")){
+			RoomInfo.setEnabled(true);
+			RoomTF.setEnabled(true);
+		}
 	}
 	
 	void btn_disable(){
@@ -469,6 +501,8 @@ public class main_ui extends JFrame{
 		Enchance.setEnabled(false);
 		Present.setEnabled(false);
 		Send.setEnabled(false);
+		RoomInfo.setEnabled(false);
+		RoomTF.setEnabled(false);
 	}
 	
 	boolean isRunable(JButton jbtn){

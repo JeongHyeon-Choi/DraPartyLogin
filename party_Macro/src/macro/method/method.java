@@ -420,5 +420,13 @@ public class method {
 		};
 		return present;
 	}
+
+	public ArrayList<String> getTitle() {
+		return title;
+	}
+
+	public ArrayList<String> getContent() {
+		return content;
+	}
 	
 }
