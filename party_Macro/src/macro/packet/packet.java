@@ -104,7 +104,7 @@ public class packet implements PacketReceiver {
 
 		JpcapCaptor jpcap = JpcapCaptor.openDevice(devices[1], 2000, true, 20);
 
-		jpcap.loopPacket(10, new packet());
+		jpcap.loopPacket(50, new packet());
 
 	}
 
