@@ -33,13 +33,13 @@ this is korean ver DragonParty Android Game Quick LoginChange App
 
 Not Impliemented
 
-***** change Login List Name �닖
+***** change Login List Name ◀
 
-****  Auto Restart DragonParty �닖
+****  Auto Restart DragonParty ◀
 
 ****  add help dialog 
 
-***   new Project Start �닖
+***   new Project Start ◀
 
 �4���8,ϮPcIB{��~T1����k4�=�o�G��y4��Q����Ơ�<���:ry���{_�"�h]���i��Ue����V���%_ռe�l�e
 ��t��l����|��?!b�j�o�e�#`��w�����S�T_U=��κ�`�lw�[	�r����� шe[�E!Ʋ����T
