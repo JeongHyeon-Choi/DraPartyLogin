@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 
 import org.apache.commons.io.IOUtils;
 
@@ -82,30 +83,40 @@ public class packet implements PacketReceiver {
 
 	}
 
-	public void Start(selectRoomIdListener slt, String uid) throws Exception {
+	public void Start(selectRoomIdListener slt, String uid ,int Device) throws Exception {
 		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
 		this.sl = slt;
 		this.uid = uid;
+//		for (int i = 0; i < devices.length; i++) {
+//			System.out.println(i + " :" + devices[i].name + "("
+//					+ devices[i].description + ")");
+//			System.out.println("    data link:" + devices[i].datalink_name
+//					+ "(" + devices[i].datalink_description + ")");
+//			System.out.print("    MAC address:");
+//			for (byte b : devices[i].mac_address) {
+//				System.out.print(Integer.toHexString(b & 0xff) + ":");
+//			}
+//			System.out.println();
+//			for (NetworkInterfaceAddress a : devices[i].addresses) {
+//				System.out.println("    address:" + a.address + " " + a.subnet
+//						+ " " + a.broadcast);
+//			}
+//		}
+//		for (int i = 0; i < devices.length; i++){
+			JpcapCaptor jpcap = JpcapCaptor.openDevice(devices[Device], 2000, true, 20);
+
+			jpcap.loopPacket(50, new packet());
+//		}
+
+	}
+	
+	public ArrayList<String> getDevice(){
+		ArrayList<String> deviceList = new ArrayList<String>();
+		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
 		for (int i = 0; i < devices.length; i++) {
-			System.out.println(i + " :" + devices[i].name + "("
-					+ devices[i].description + ")");
-			System.out.println("    data link:" + devices[i].datalink_name
-					+ "(" + devices[i].datalink_description + ")");
-			System.out.print("    MAC address:");
-			for (byte b : devices[i].mac_address) {
-				System.out.print(Integer.toHexString(b & 0xff) + ":");
-			}
-			System.out.println();
-			for (NetworkInterfaceAddress a : devices[i].addresses) {
-				System.out.println("    address:" + a.address + " " + a.subnet
-						+ " " + a.broadcast);
-			}
+			deviceList.add(i,devices[i].description);
 		}
-
-		JpcapCaptor jpcap = JpcapCaptor.openDevice(devices[1], 2000, true, 20);
-
-		jpcap.loopPacket(50, new packet());
-
+		return deviceList;
 	}
 
 	public interface selectRoomIdListener {

@@ -11,10 +11,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -65,6 +67,7 @@ public class main_ui extends JFrame{
 	JButton Enchance = new JButton("강화");
 	JButton Present = new JButton("선물");
 	
+	JComboBox EtherNet = new JComboBox<>();
 	JLabel RoomTF = new JLabel("roomID");
 	JButton RoomInfo = new JButton("방정보");
 	
@@ -82,13 +85,14 @@ public class main_ui extends JFrame{
 	macroActionListener mMacroActionListener = new macroActionListener();
 	
 	method mMethod;
+	packet mPacket;
 	
 	public main_ui() {
 		
 //		  try {
 //	            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 //	        }catch(Exception ee) {}
-		  
+		mPacket = new packet();
 		Container mContainer = getContentPane();
 		JMenuBar mb = new JMenuBar();
 		setLayout(new BorderLayout());
@@ -134,15 +138,15 @@ public class main_ui extends JFrame{
 		RoomInfo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				packet pp = new packet();
+				
 				try {
-					pp.Start(new selectRoomIdListener() {
+					mPacket.Start(new selectRoomIdListener() {
 						@Override
 						public void select(String str) {
 							InputRoom.setText(str);
 							RoomTF.setText(str);
 						}
-					} , mMethod.getContent().get(0));
+					} , mMethod.getContent().get(0) , EtherNet.getSelectedIndex());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -158,6 +162,7 @@ public class main_ui extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				if(!mHeaderArea.getText().equals("")){
 					addCardList();
+					addEtherNet(mPacket.getDevice());
 					mMethod = new method(mHeaderArea.getText());
 					btn_enable();
 				}
@@ -172,6 +177,7 @@ public class main_ui extends JFrame{
 		mJPanel.add(Nomal);
 		mJPanel.add(Enchance);
 		mJPanel.add(Present);
+		mJPanel.add(EtherNet);
 		mJPanel.add(RoomTF);
 		mJPanel.add(RoomInfo);
 		
@@ -238,7 +244,7 @@ public class main_ui extends JFrame{
 		InputRoom = new JTextField();
 		JRadioButton skill1 = new JRadioButton("1 : 카드화 전체");
 		JRadioButton skill2 = new JRadioButton("2 : 카드화 2");
-		JRadioButton skill3 = new JRadioButton("3 : 카드화 3");
+		JRadioButton skill3 = new JRadioButton("3 : 카드화 1");
 		JRadioButton skill4 = new JRadioButton("4 : 스킬 절대 발동");
 		JRadioButton skill5 = new JRadioButton("5 : 취소");
 		skillgroup = new ButtonGroup();
@@ -246,7 +252,7 @@ public class main_ui extends JFrame{
 		skillgroup.add(skill3);skillgroup.add(skill4);skillgroup.add(skill5);	
 		skill1.setActionCommand("1 : 카드화 전체");
 		skill2.setActionCommand("2 : 카드화 2");
-		skill3.setActionCommand("3 : 카드화 3");
+		skill3.setActionCommand("3 : 카드화 1");
 		skill4.setActionCommand("4 : 스킬 절대 발동");
 		skill5.setActionCommand("5 : 취소");
 		skill1.addActionListener(mSkillActionListener);
@@ -444,6 +450,15 @@ public class main_ui extends JFrame{
 			}
 		}
 		
+	}
+	
+	void addEtherNet(ArrayList<String> ary){
+		EtherNet.removeAllItems();
+		for (int i = 0, cnt = ary.size(); i < cnt; i++) {
+			String tmp = ary.get(i);
+			if(tmp.length() > 6) tmp = tmp.substring(0, 6);
+			EtherNet.addItem(tmp);
+		}
 	}
 	
 	void addCardList(){
