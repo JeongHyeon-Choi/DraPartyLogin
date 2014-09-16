@@ -14,14 +14,17 @@ public class method {
 	public final static String NOMAL = "0";
 	public final static String ENHANCE = "19";
 	protected method singleMehod;
+	
 	ArrayList<String> title = new ArrayList<>();
 	ArrayList<String> content = new ArrayList<>();
+	SetConsole msetConsole;
 	
 	private method(){
 	}
 	
-	public method(String str){
-		singleMehod = this;
+	public method(String str ,SetConsole msetConsole){
+		this.singleMehod = this;
+		this.msetConsole = msetConsole;
 		classiy(str);
 	}
 	
@@ -58,8 +61,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-				SetConsole.setSyso(line);
+				msetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -86,8 +88,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-				SetConsole.setSyso(line);
+				msetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -121,8 +122,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line; 
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-				SetConsole.setSyso(line);
+				msetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -161,8 +161,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line; 
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-				SetConsole.setSyso(line);
+				msetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -189,12 +188,11 @@ public class method {
 			String line;
 			String DeckListJson = "";
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
 				DeckListJson += line;
 			}
 			wr.close();
 			rd.close();
-			SetConsole.setSyso(DeckListJson);
+			msetConsole.setSyso(DeckListJson);
 			return DeckListJson;
 		} catch (Exception e) {
 		}
@@ -202,7 +200,7 @@ public class method {
 	}
 	
 	public void sales(String DeckListJson){
-		jsonParser jp = new jsonParser(DeckListJson.substring(1));
+		jsonParser jp = new jsonParser(); jp.makeArray(DeckListJson.substring(1));
 		String parsingStr = jp.getSalesJson(); 
 		try {
 			// Construct data
@@ -229,8 +227,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-				SetConsole.setSyso(line);
+				msetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -239,7 +236,7 @@ public class method {
 	}
 	
 	public void enchance(String DeckListJson, String baseID){
-		jsonParser jp = new jsonParser(DeckListJson.substring(1));
+		jsonParser jp = new jsonParser(); jp.makeArray(DeckListJson.substring(1));
 		String parsingStr = jp.getEnchanceJson(); 
 		try {
 			// Construct data
@@ -268,8 +265,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-				SetConsole.setSyso(line);
+				msetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -303,12 +299,11 @@ public class method {
 			String line;
 			String EvolJson = "";
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
 				EvolJson += line;
 			}
 			wr.close();
 			rd.close();
-			SetConsole.setSyso(EvolJson);
+			msetConsole.setSyso(EvolJson);
 			return EvolJson;
 		} catch (Exception e) {
 		}
@@ -348,8 +343,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-				SetConsole.setSyso(line);
+				msetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -411,18 +405,10 @@ public class method {
 					}
 					getGacha(ENHANCE);
 					
-					jsonParser jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
-					jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
-					jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
-					jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
+					for (int i = 0; i < 4; i++) {
+						jsonParser jp = new jsonParser(); jp.makeArray(getDeckList().substring(1));
+						evol(jp.getEvolJson(singleMehod)); 
+					}
 				}
 			}
 		};
@@ -463,18 +449,10 @@ public class method {
 					}
 					getPresentAll();
 					
-					jsonParser jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
-					jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
-					jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
-					jp = new jsonParser(getDeckList().substring(1));
-					evol(jp.getEvolJson(singleMehod)); 
-					
+					for (int i = 0; i < 4; i++) {
+						jsonParser jp = new jsonParser(); jp.makeArray(getDeckList().substring(1));
+						evol(jp.getEvolJson(singleMehod)); 
+					}
 				}
 			}
 		};

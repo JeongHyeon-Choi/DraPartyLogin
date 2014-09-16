@@ -88,6 +88,7 @@ public class main_ui extends JFrame{
 	
 	method mMethod;
 	packet mPacket;
+	SetConsole mSetConsole;
 	
 	public main_ui() {
 		
@@ -95,6 +96,8 @@ public class main_ui extends JFrame{
 //	            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 //	        }catch(Exception ee) {}
 		mPacket = new packet();
+		mSetConsole = new SetConsole();
+
 		Container mContainer = getContentPane();
 		JMenuBar mb = new JMenuBar();
 		setLayout(new BorderLayout());
@@ -172,7 +175,7 @@ public class main_ui extends JFrame{
 				if(!mHeaderArea.getText().equals("")){
 					addCardList();
 					addEtherNet(mPacket.getDevice());
-					mMethod = new method(mHeaderArea.getText());
+					mMethod = new method(mHeaderArea.getText(), mSetConsole);
 					btn_enable();
 				}
 			}
@@ -220,7 +223,7 @@ public class main_ui extends JFrame{
 		mJPanel.add(scrollPane2);
 		mJPanel.add(scrollPane3);
 		
-		SetConsole.setArea(mLogArea);
+		mSetConsole.setArea(mLogArea);
 		
 		return mJPanel; 
 	}
@@ -380,7 +383,7 @@ public class main_ui extends JFrame{
 			} else if (cmd.equals("Set MacroInfo")){
 				if(!mHeaderArea.getText().equals("")){
 					addCardList();
-					mMethod = new method(mHeaderArea.getText());
+					mMethod = new method(mHeaderArea.getText(), mSetConsole);
 					btn_enable();
 				}
 			}
@@ -388,24 +391,19 @@ public class main_ui extends JFrame{
 		}
 		
 	}
-
+	class cardListListener implements ListSelectionListener{
+		@Override
+		public void valueChanged(ListSelectionEvent arg0) {
+		}
+	}
 	class skillActionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			skillgroup.getElements();
-			System.out.println(skillgroup.getSelection().getActionCommand());
 			getSkillId(skillgroup.getSelection().getActionCommand().split(":")[0].trim());
 		}
 		
-	}
-	
-	class cardListListener implements ListSelectionListener{
-		@Override
-		public void valueChanged(ListSelectionEvent event) {
-			System.out.println(event);
-			System.out.println(cardList.getSelectedIndex());
-		}
 	}
 	
 	class macroActionListener implements ActionListener{

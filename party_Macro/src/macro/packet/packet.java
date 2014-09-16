@@ -33,8 +33,6 @@ public class packet implements PacketReceiver {
 	}
 
 	public void receivePacket(Packet packet) {
-		System.out.println(packet + "\n");
-		System.out.println("this is packet " + i + " :" + "\n");
 		i++;
 
 		IPPacket tpt = (IPPacket) packet;
@@ -42,28 +40,20 @@ public class packet implements PacketReceiver {
 
 			int ppp = tpt.protocol;
 			String proto = protocoll[ppp];
-			System.out.println("about the ip packet in network layer : \n");
-			System.out
-					.println("******************************************************************");
 			if (!tpt.dst_ip.toString().equals("/211.238.6.163"))
 				return;
 
 			if (proto.equals(("TCP"))) {
-				System.out.println(" /n this is TCP packet");
 				TCPPacket tp = (TCPPacket) packet;
-				System.out.println("this is destination port of tcp :"
-						+ tp.dst_port);
 				InetAddress a = tp.src_ip;
 				// if("/211.238.6.163".equals(a.toString())){
 				InputStream is = new ByteArrayInputStream(packet.data);
 				try {
 					String sstr = IOUtils.toString(is, "UTF-8");
-					System.out.println("STRING " + sstr);
 					if(sstr.contains("drapoker")){
 						if (sstr.contains(uid) && sstr.contains("connectBattle.php")) {
 							String temp = sstr.split("roomID=")[1].split("\n")[0]
 									.toString().trim();
-							System.out.println("addddddddddddddddddd : " + temp);
 							sl.select(temp);
 						}  
 						sl.header((sstr.split("HTTP/1.1")[1].split("Keep-Alive")[0] + "Keep-Alive").trim());
@@ -75,7 +65,6 @@ public class packet implements PacketReceiver {
 				String ss;
 				try {
 					ss = new String(packet.data, "UTF-8");
-					System.out.println("STRING " + ss);
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

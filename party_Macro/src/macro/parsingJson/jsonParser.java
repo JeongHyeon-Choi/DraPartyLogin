@@ -6,6 +6,7 @@ import macro.method.method;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 
 public class jsonParser {
 
@@ -13,9 +14,9 @@ public class jsonParser {
 	JSONArray jar = new JSONArray();
 	ArrayList<String> TarCardId = new ArrayList<>();
 
-	public jsonParser(String str) {
-		System.out.println("=======decode=======");
-
+	public jsonParser() {}
+	
+	public void makeArray(String str){
 		Object obj = JSONValue.parse(str);
 		JSONObject oo = (JSONObject) obj;
 		try {
@@ -27,8 +28,8 @@ public class jsonParser {
 
 	public String getSalesJson() {
 		for (int i = 0; i < jar.size(); i++) {
-			if ((((JSONObject) jar.get(i)).get("rare").equals("1")
-			|| ((JSONObject) jar.get(i)).get("rare").equals("3"))
+			if (((((JSONObject) jar.get(i)).get("rare").equals("1")
+			|| ((JSONObject) jar.get(i)).get("rare").equals("3")))
 			&& ((JSONObject) jar.get(i)).get("level").equals("1")
 			&& !isRevolcard((String) ((JSONObject) jar.get(i)).get("cardID"))) {
 				
@@ -52,8 +53,8 @@ public class jsonParser {
 	
 	public String getEnchanceJson() {
 		for (int i = 0; i < jar.size(); i++) {
-			if ((((JSONObject) jar.get(i)).get("rare").equals("1")
-			|| ((JSONObject) jar.get(i)).get("rare").equals("3"))
+			if (((((JSONObject) jar.get(i)).get("rare").equals("1")
+			|| ((JSONObject) jar.get(i)).get("rare").equals("3")))
 			&& ((JSONObject) jar.get(i)).get("level").equals("1")
 			&& !isRevolcard((String) ((JSONObject) jar.get(i)).get("cardID"))) {
 				
@@ -83,7 +84,6 @@ public class jsonParser {
 	}
 	
 	public String EvoljsonParser(String str) {
-		System.out.println("=======EVOL=======");
 
 		Object obj = JSONValue.parse(str);
 		JSONObject oo = (JSONObject) obj;
