@@ -238,6 +238,45 @@ public class method {
 		}
 	}
 	
+	public void enchance(String DeckListJson, String baseID){
+		jsonParser jp = new jsonParser(DeckListJson.substring(1));
+		String parsingStr = jp.getEnchanceJson(); 
+		try {
+			// Construct data
+			String data = URLEncoder.encode("baseID", "UTF-8") + "="
+					+ URLEncoder.encode(baseID, "UTF-8");
+			data += "&" + URLEncoder.encode("addID", "UTF-8") + "="
+					+ URLEncoder.encode(parsingStr, "UTF-8");
+			data += "&" + URLEncoder.encode("exec", "UTF-8") + "="
+					+ URLEncoder.encode("1", "UTF-8");
+
+			// Send data
+			URL url = new URL("http://drapoker.potluckgames.co.kr/net/cardRnfc.php");
+			URLConnection conn = url.openConnection();
+			// If you invoke the method setDoOutput(true) on the URLConnection,
+			// it will always use the POST method.
+			conn.setDoOutput(true);
+			setHeader(conn);
+
+			OutputStreamWriter wr = new OutputStreamWriter(
+					conn.getOutputStream());
+			wr.write(data);
+			wr.flush();
+
+			// Get the response
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					conn.getInputStream(), "UTF-8"));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				System.out.println(line);
+				SetConsole.setSyso(line);
+			}
+			wr.close();
+			rd.close();
+		} catch (Exception e) {
+		}
+	}
+	
 	public String evolcheck(String baseID){
 	
 		try {
@@ -361,7 +400,7 @@ public class method {
 	}
 
 	public Runnable getEvolgacha() {
-		Runnable evolgacha=  new Runnable() {
+		Runnable evolgacha = new Runnable() {
 			public void run() {
 				while (true) {
 					try {
@@ -388,6 +427,28 @@ public class method {
 			}
 		};
 		return evolgacha;
+	}
+	
+	public Runnable delMoney(final String BaseID) {
+		Runnable present = new Runnable() {
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					getGacha(NOMAL);
+					
+					for (int i = 0; i < 10; i++) {
+						enchance(getDeckList(), BaseID);
+					}
+					
+				}
+			}
+		};
+		return present;
 	}
 	
 	public Runnable getPresnet() {

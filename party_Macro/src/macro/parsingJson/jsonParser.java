@@ -50,6 +50,19 @@ public class jsonParser {
 		return ParseString;
 	}
 	
+	public String getEnchanceJson() {
+		for (int i = 0; i < jar.size(); i++) {
+			if ((((JSONObject) jar.get(i)).get("rare").equals("1")
+			|| ((JSONObject) jar.get(i)).get("rare").equals("3"))
+			&& ((JSONObject) jar.get(i)).get("level").equals("1")
+			&& !isRevolcard((String) ((JSONObject) jar.get(i)).get("cardID"))) {
+				
+				return (String) ((JSONObject) jar.get(i)).get("traCardID");
+			}
+		}
+		return ParseString;
+	}
+	
 	public String[] getEvolJson(method evolmethod){
 		String TargetEvol = "ERR";
 		String BaseId = "";

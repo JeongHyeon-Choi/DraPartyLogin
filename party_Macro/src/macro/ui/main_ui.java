@@ -66,6 +66,7 @@ public class main_ui extends JFrame{
 	JButton Nomal = new JButton("노멀");
 	JButton Enchance = new JButton("강화");
 	JButton Present = new JButton("선물");
+	JButton Del = new JButton("돈낭비");
 	
 	JComboBox EtherNet = new JComboBox<>();
 	JLabel RoomTF = new JLabel("roomID");
@@ -79,6 +80,7 @@ public class main_ui extends JFrame{
 	Thread th_nomal;
 	Thread th_enchance;
 	Thread th_present;
+	Thread th_del;
 	
 	menuActionListener mMenuActionListener = new menuActionListener();
 	skillActionListener mSkillActionListener = new skillActionListener();
@@ -115,7 +117,7 @@ public class main_ui extends JFrame{
 	
 	JPanel setMacromJPanel(){
 		JPanel mJPanel = new JPanel();
-		mJPanel.setLayout(new GridLayout(10, 1));
+		mJPanel.setLayout(new GridLayout(11, 1));
 		
 		
 		Charg1 = new JButton("충전X1");
@@ -124,6 +126,7 @@ public class main_ui extends JFrame{
 		Nomal = new JButton("노멀");
 		Enchance = new JButton("강화");
 		Present = new JButton("선물");
+		Del = new JButton("돈낭비");
 		
 		RoomTF = new JLabel("roomID",JLabel.CENTER);
 		RoomInfo = new JButton("방정보");
@@ -134,6 +137,7 @@ public class main_ui extends JFrame{
 		Nomal.addActionListener(mMacroActionListener);
 		Enchance.addActionListener(mMacroActionListener);
 		Present.addActionListener(mMacroActionListener);
+		Del.addActionListener(mMacroActionListener);
 		
 		RoomInfo.addActionListener(new ActionListener() {
 			@Override
@@ -182,6 +186,7 @@ public class main_ui extends JFrame{
 		mJPanel.add(Nomal);
 		mJPanel.add(Enchance);
 		mJPanel.add(Present);
+		mJPanel.add(Del);
 		mJPanel.add(EtherNet);
 		mJPanel.add(RoomTF);
 		mJPanel.add(RoomInfo);
@@ -435,22 +440,39 @@ public class main_ui extends JFrame{
 				if (isRunable(Nomal)) {
 					th_nomal = new Thread(mMethod.getNomalgacha());
 					th_nomal.start();
+					Del.setEnabled(false);
 				} else {
 					th_nomal.stop();
+					Del.setEnabled(true);
 				}
 			} else if (cmd.equals("강화")) {
 				if (isRunable(Enchance)) {
 					th_enchance = new Thread(mMethod.getEvolgacha());
 					th_enchance.start();
+					Present.setEnabled(false);
 				} else {
 					th_enchance.stop();
+					Present.setEnabled(true);
 				}
 			} else if (cmd.equals("선물")) {
 				if (isRunable(Present)) {
 					th_present = new Thread(mMethod.getPresnet());
 					th_present.start();
+					Enchance.setEnabled(false);
 				} else {
 					th_present.stop();
+					Enchance.setEnabled(true);
+				}
+			} else if (cmd.equals("돈낭비")) {
+				String BaseID = (cardList.getSelectedIndex() == -1) ? "" : cardListModel.getElementAt(cardList.getSelectedIndex()) ;
+				if (!BaseID.contains(":"));
+				else if (isRunable(Del)) {
+					th_del = new Thread(mMethod.delMoney(BaseID.split(":")[1].trim()));
+					th_del.start();
+					Nomal.setEnabled(false);
+				} else {
+					th_del.stop();
+					Nomal.setEnabled(true);
 				}
 			}
 		}
@@ -507,6 +529,7 @@ public class main_ui extends JFrame{
 		Enchance.setEnabled(true);
 		Present.setEnabled(true);
 		Send.setEnabled(true);
+		Del.setEnabled(true);
 		if(mMethod.getTitle().get(5).equals("deviceID") && mMethod.getContent().get(5).equals("000000000000000")){
 			RoomInfo.setEnabled(true);
 			RoomTF.setEnabled(true);
@@ -523,6 +546,7 @@ public class main_ui extends JFrame{
 		Send.setEnabled(false);
 		RoomInfo.setEnabled(false);
 		RoomTF.setEnabled(false);
+		Del.setEnabled(false);
 	}
 	
 	boolean isRunable(JButton jbtn){
