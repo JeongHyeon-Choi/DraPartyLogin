@@ -59,11 +59,14 @@ public class packet implements PacketReceiver {
 				try {
 					String sstr = IOUtils.toString(is, "UTF-8");
 					System.out.println("STRING " + sstr);
-					if (sstr.contains(uid) && sstr.contains("connectBattle.php")) {
-						String temp = sstr.split("roomID=")[1].split("\n")[0]
-								.toString().trim();
-						System.out.println("addddddddddddddddddd : " + temp);
-						sl.select(temp);
+					if(sstr.contains("drapoker")){
+						if (sstr.contains(uid) && sstr.contains("connectBattle.php")) {
+							String temp = sstr.split("roomID=")[1].split("\n")[0]
+									.toString().trim();
+							System.out.println("addddddddddddddddddd : " + temp);
+							sl.select(temp);
+						}  
+						sl.header((sstr.split("HTTP/1.1")[1].split("Keep-Alive")[0] + "Keep-Alive").trim());
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -121,5 +124,6 @@ public class packet implements PacketReceiver {
 
 	public interface selectRoomIdListener {
 		void select(String str);
+		void header(String str);
 	}
 }

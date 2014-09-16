@@ -146,6 +146,11 @@ public class main_ui extends JFrame{
 							InputRoom.setText(str);
 							RoomTF.setText(str);
 						}
+
+						@Override
+						public void header(String str) {
+							mHeaderArea.setText(str);
+						}
 					} , mMethod.getContent().get(0) , EtherNet.getSelectedIndex());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

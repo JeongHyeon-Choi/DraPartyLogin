@@ -401,7 +401,6 @@ public class method {
 						e.printStackTrace();
 					}
 					getPresentAll();
-					getPresentAll();
 					
 					jsonParser jp = new jsonParser(getDeckList().substring(1));
 					evol(jp.getEvolJson(singleMehod)); 
