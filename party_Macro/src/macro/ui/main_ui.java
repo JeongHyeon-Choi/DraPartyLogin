@@ -68,7 +68,7 @@ public class main_ui extends JFrame{
 	JButton Present = new JButton("선물");
 	JButton Del = new JButton("돈낭비");
 	
-	JComboBox EtherNet = new JComboBox<>();
+	JComboBox EtherNet = new JComboBox<String>();
 	JLabel RoomTF = new JLabel("roomID");
 	JButton RoomInfo = new JButton("방정보");
 	

@@ -15,10 +15,11 @@ public class method {
 	public final static String ENHANCE = "19";
 	protected method singleMehod;
 	
-	ArrayList<String> title = new ArrayList<>();
-	ArrayList<String> content = new ArrayList<>();
+	ArrayList<String> title = new ArrayList<String>();
+	ArrayList<String> content = new ArrayList<String>();
 	SetConsole msetConsole;
 	
+	@SuppressWarnings("unused")
 	private method(){
 	}
 	
