@@ -1,6 +1,7 @@
 package macro.parsingJson;
 import java.util.ArrayList;
 
+import macro.method.SetConsole;
 import macro.method.method;
 
 import org.json.simple.JSONArray;
@@ -8,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.makeshop.android.manager.JsonSelector;
+import com.sun.xml.internal.fastinfoset.util.StringArray;
 
 public class jsonParser {
 
@@ -18,7 +20,7 @@ public class jsonParser {
 	
 	public jsonParser() {}
 	
-	public void makeArray(String str){
+	public void makeDeckArray(String str){
 		mSelector = new JsonSelector(str.trim());
 		try {
 			mArrySelector = mSelector.query("result>tra_card");
@@ -26,23 +28,67 @@ public class jsonParser {
 			return ;
 		}
 	}
+	
+	public void makeCardArray(String str){
+		mSelector = new JsonSelector(str.trim());
+		try {
+			mArrySelector = str.contains("tra_card_deck") ? mSelector.query("result>tra_card_deck>eqID"): mSelector.query("result>cardDeckList");
+		} catch (Exception e) {
+			return ;
+		}
+	}
 
+	public String EvoljsonParser(String str) {
+		
+		Object obj = JSONValue.parse(str);
+		JSONObject oo = (JSONObject) obj;
+		JSONObject E_jobj =  (JSONObject)((JSONArray) ((JSONObject) oo.get("result")).get("evolList")).get(0);
+		if(E_jobj.get("isEnable").toString().equals("1")){ 
+			return (String) ((JSONObject) E_jobj.get("afterCardContents")).get("cardID");
+		}
+		return "ERR";
+	}
+	
+	public String getBCardListJson() {
+		SetConsole.setSyso("===CardList===");
+		StringArray colList = new StringArray() ;
+		for (int i = 0; i < 13 ; i++) {
+			String tmp = mArrySelector.getString( (i+1) + "" );
+			for (int j = 0; mSelector.query("result>tra_card>[" + j + "]").hasResult(); j++) {
+				if(tmp.equals(mSelector.query("result>tra_card>[" + j + "]").getString("traCardID"))){
+					colList.add(mSelector.query("result>tra_card>[" + j + "]").getString("cardName")); 
+					break;
+				}
+			}
+			ParseString += colList.get(i) + 
+					":" + tmp + "\n";
+		}
+		return ParseString;
+	}
+	
+	public String getCCardListJson() {
+		SetConsole.setSyso("===CardList===");
+		String[] colList = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"} ;
+		for (int i = 0; mArrySelector.query("[" + i + "]").hasResult() && i < 13 ; i++) {
+			ParseString += colList[i] + mArrySelector.query("[" + i + "]").getString("cardName") + 
+					":" + mArrySelector.query("[" + i + "]").getString("traCardID") + "\n";
+		}
+		return ParseString;
+	}
+	
 	public String getSalesJson() {
+		SetConsole.setSyso("===Sales===");
 		for (int i = 0; mArrySelector.query("[" + i + "]").hasResult() ; i++) {
-			if ((mArrySelector.query("[" + i + "]").getString("rare").equals("1")
-			|| mArrySelector.query("[" + i + "]").getString("rare").equals("3"))
+			if ( isRarecard(mArrySelector.query("[" + i + "]").getString("rare"), "1", "3")
 			&& mArrySelector.query("[" + i + "]").getString("level").equals("1")
 			&& !isRevolcard(mArrySelector.query("[" + i + "]").getString("cardID"))) {
 				
 				TarCardId.add(mArrySelector.query("[" + i + "]").getString("traCardID"));
 				if (TarCardId.size() == 10) {
 					break;
-					
 				}
 			}
 		}
-		
-//		ParseString = "saleID=";
 		ParseString = "";
 		for (int i = 0; i < TarCardId.size(); i++) {
 			ParseString += TarCardId.get(i);
@@ -52,9 +98,9 @@ public class jsonParser {
 	}
 	
 	public String getEnchanceJson() {
+		SetConsole.setSyso("===Enchance===");
 		for (int i = 0; mArrySelector.query("[" + i + "]").hasResult() ; i++) {
-			if ((mArrySelector.query("[" + i + "]").getString("rare").equals("1")
-			|| mArrySelector.query("[" + i + "]").getString("rare").equals("3"))
+			if ( isRarecard(mArrySelector.query("[" + i + "]").getString("rare"), "1", "3")
 			&& mArrySelector.query("[" + i + "]").getString("level").equals("1")
 			&& !isRevolcard(mArrySelector.query("[" + i + "]").getString("cardID"))) {
 				
@@ -65,6 +111,7 @@ public class jsonParser {
 	}
 	
 	public String[] getEvolJson(method evolmethod){
+		SetConsole.setSyso("===Evol===");
 		String TargetEvol = "ERR";
 		String BaseId = "";
 		for (int i = 0; mArrySelector.query("[" + i + "]").hasResult() ; i++) {
@@ -83,19 +130,8 @@ public class jsonParser {
 		return new String[] {BaseId, TargetEvol};
 	}
 	
-	public String EvoljsonParser(String str) {
-
-		Object obj = JSONValue.parse(str);
-		JSONObject oo = (JSONObject) obj;
-		JSONObject E_jobj =  (JSONObject)((JSONArray) ((JSONObject) oo.get("result")).get("evolList")).get(0);
-		if(E_jobj.get("isEnable").toString().equals("1")){ 
-			return (String) ((JSONObject) E_jobj.get("afterCardContents")).get("cardID");
-		}
-		return "ERR";
-	}
-	
-	boolean isRarecard(Object rare, String... str){
-		for (String grade : str) {
+	boolean isRarecard(Object rare, String... gradeList){
+		for (String grade : gradeList) {
 			if(rare.equals(grade)){
 				return true;
 			}

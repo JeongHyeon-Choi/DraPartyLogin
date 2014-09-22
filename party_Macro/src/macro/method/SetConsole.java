@@ -1,15 +1,21 @@
 package macro.method;
 
-import javax.swing.JTextArea;
+import macro.ui.main_ui;
+
+import com.makeshop.android.manager.ObserverManager;
+
 
 public class SetConsole {
-	public JTextArea jta;
+	private static String log = "";
 	
-	public void setSyso(String str){
-		jta.setText("");
-		jta.setText(str);
+	public static void setSyso(String str){
+		String tmp = (str.length() > 100) ? str.substring(0, 100).trim() : str;
+		if(log.equals(tmp)) return;
+		log = tmp;
+		ObserverManager.getInstance().notifyObserver(main_ui.MACRO);
 	}
-	public void setArea(JTextArea ta){
-		jta = ta;
+	
+	public static String getSyso(){
+		return log;
 	}
 }

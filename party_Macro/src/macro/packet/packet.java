@@ -46,7 +46,6 @@ public class packet implements PacketReceiver {
 			if (proto.equals(("TCP"))) {
 				TCPPacket tp = (TCPPacket) packet;
 				InetAddress a = tp.src_ip;
-				// if("/211.238.6.163".equals(a.toString())){
 				InputStream is = new ByteArrayInputStream(packet.data);
 				try {
 					String sstr = IOUtils.toString(is, "UTF-8");
@@ -54,22 +53,23 @@ public class packet implements PacketReceiver {
 						if (sstr.contains(uid) && sstr.contains("connectBattle.php")) {
 							String temp = sstr.split("roomID=")[1].split("\n")[0]
 									.toString().trim();
-							sl.select(temp);
-						}  
+							sl.select("B"+temp);
+						} else if (sstr.contains(uid) && sstr.contains("connectColosseum.php")){
+							String temp = sstr.split("roomID=")[1].split("\n")[0]
+									.toString().trim();
+							sl.select("C"+temp);
+						}
 						sl.header((sstr.split("HTTP/1.1")[1].split("Keep-Alive")[0] + "Keep-Alive").trim());
 					}
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				String ss;
 				try {
 					ss = new String(packet.data, "UTF-8");
 				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				// }
 			}
 		}
 
@@ -79,27 +79,8 @@ public class packet implements PacketReceiver {
 		NetworkInterface[] devices = JpcapCaptor.getDeviceList();
 		this.sl = slt;
 		this.uid = uid;
-//		for (int i = 0; i < devices.length; i++) {
-//			System.out.println(i + " :" + devices[i].name + "("
-//					+ devices[i].description + ")");
-//			System.out.println("    data link:" + devices[i].datalink_name
-//					+ "(" + devices[i].datalink_description + ")");
-//			System.out.print("    MAC address:");
-//			for (byte b : devices[i].mac_address) {
-//				System.out.print(Integer.toHexString(b & 0xff) + ":");
-//			}
-//			System.out.println();
-//			for (NetworkInterfaceAddress a : devices[i].addresses) {
-//				System.out.println("    address:" + a.address + " " + a.subnet
-//						+ " " + a.broadcast);
-//			}
-//		}
-//		for (int i = 0; i < devices.length; i++){
-			JpcapCaptor jpcap = JpcapCaptor.openDevice(devices[Device], 2000, true, 20);
-
-			jpcap.loopPacket(50, new packet());
-//		}
-
+		JpcapCaptor jpcap = JpcapCaptor.openDevice(devices[Device], 2000, true,20);
+		jpcap.loopPacket(50, new packet());
 	}
 	
 	public ArrayList<String> getDevice(){

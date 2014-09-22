@@ -17,15 +17,12 @@ public class method {
 	
 	ArrayList<String> title = new ArrayList<String>();
 	ArrayList<String> content = new ArrayList<String>();
-	SetConsole msetConsole;
 	
-	@SuppressWarnings("unused")
 	private method(){
 	}
 	
-	public method(String str ,SetConsole msetConsole){
+	public method(String str){
 		this.singleMehod = this;
-		this.msetConsole = msetConsole;
 		classiy(str);
 	}
 	
@@ -62,7 +59,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				msetConsole.setSyso(line);
+				SetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -89,7 +86,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				msetConsole.setSyso(line);
+				SetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -123,29 +120,27 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line; 
 			while ((line = rd.readLine()) != null) {
-				msetConsole.setSyso(line);
+				SetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
 		} catch (Exception e) {
 		}
 	}
-	
-	public void SendCard(String roomId, String traCardId, String skill){
-		if(roomId.equals("") || traCardId.equals("")) return;
-		try {
-			// Construct data
 
+	public void sendCard(String strRoomID, String strCardID, String strSkillID, String strURL){
+		if(strRoomID.equals("") || strCardID.equals("")) return;
+		try {
 			//roomID=1758590&traCardID=19748435&turnCount=7&useCardGauge=210001&targetID=1303571
 			String data = URLEncoder.encode("roomID", "UTF-8") + "="
-					+ URLEncoder.encode(roomId, "UTF-8");				//��í ����
+					+ URLEncoder.encode(strRoomID, "UTF-8");				
 			data += "&" + URLEncoder.encode("traCardID", "UTF-8") + "="
-					+ URLEncoder.encode(traCardId, "UTF-8") + "&turnCount=";
-			data += skill.equals("") ? "" : "&" + URLEncoder.encode("useCardGauge", "UTF-8") + "="
-					+ URLEncoder.encode(skill, "UTF-8");
+					+ URLEncoder.encode(strCardID, "UTF-8") + "&turnCount=";
+			data += strSkillID.equals("") ? "" : "&" + URLEncoder.encode("useCardGauge", "UTF-8") + "="
+					+ URLEncoder.encode(strSkillID, "UTF-8");
 
 			// Send data
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/sendBattleCard.php");
+			URL	url = new URL(strURL);
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -162,12 +157,51 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line; 
 			while ((line = rd.readLine()) != null) {
-				msetConsole.setSyso(line);
+				SetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
 		} catch (Exception e) {
 		}
+	}
+
+	public String getCardList(String strParams, String strURL){
+		if(strParams.equals("")) return null;
+		try {
+			String data = strParams;	
+
+			// Send data
+			URL	url = new URL(strURL);
+			URLConnection conn = url.openConnection();
+			// If you invoke the method setDoOutput(true) on the URLConnection,
+			// it will always use the POST method.
+			conn.setDoOutput(true);
+			setHeader(conn);
+
+			OutputStreamWriter wr = new OutputStreamWriter(
+					conn.getOutputStream());
+			wr.write(data);
+			wr.flush();
+
+			// Get the response
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					conn.getInputStream(), "UTF-8"));
+			String line; 
+			String CardListJson = "";
+			while ((line = rd.readLine()) != null) {
+				CardListJson += line;
+			}
+			wr.close();
+			rd.close();
+			SetConsole.setSyso(CardListJson);
+			
+			jsonParser jp = new jsonParser(); 
+			jp.makeCardArray(CardListJson.substring(1));
+			String parsingStr = strParams.equals("nop=nop") ? jp.getBCardListJson(): jp.getCCardListJson();
+			return parsingStr;
+		} catch (Exception e) {
+		}
+		return null;
 	}
 	
 	public String getDeckList(){
@@ -193,7 +227,7 @@ public class method {
 			}
 			wr.close();
 			rd.close();
-			msetConsole.setSyso(DeckListJson);
+			SetConsole.setSyso(DeckListJson);
 			return DeckListJson;
 		} catch (Exception e) {
 		}
@@ -201,7 +235,7 @@ public class method {
 	}
 	
 	public void sales(String DeckListJson){
-		jsonParser jp = new jsonParser(); jp.makeArray(DeckListJson.substring(1));
+		jsonParser jp = new jsonParser(); jp.makeDeckArray(DeckListJson.substring(1));
 		String parsingStr = jp.getSalesJson(); 
 		try {
 			// Construct data
@@ -228,7 +262,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				msetConsole.setSyso(line);
+				SetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -237,7 +271,7 @@ public class method {
 	}
 	
 	public void enchance(String DeckListJson, String baseID){
-		jsonParser jp = new jsonParser(); jp.makeArray(DeckListJson.substring(1));
+		jsonParser jp = new jsonParser(); jp.makeDeckArray(DeckListJson.substring(1));
 		String parsingStr = jp.getEnchanceJson(); 
 		try {
 			// Construct data
@@ -266,7 +300,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				msetConsole.setSyso(line);
+				SetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -304,7 +338,7 @@ public class method {
 			}
 			wr.close();
 			rd.close();
-			msetConsole.setSyso(EvolJson);
+			SetConsole.setSyso(EvolJson);
 			return EvolJson;
 		} catch (Exception e) {
 		}
@@ -344,7 +378,7 @@ public class method {
 					conn.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				msetConsole.setSyso(line);
+				SetConsole.setSyso(line);
 			}
 			wr.close();
 			rd.close();
@@ -407,7 +441,7 @@ public class method {
 					getGacha(ENHANCE);
 					
 					for (int i = 0; i < 4; i++) {
-						jsonParser jp = new jsonParser(); jp.makeArray(getDeckList().substring(1));
+						jsonParser jp = new jsonParser(); jp.makeDeckArray(getDeckList().substring(1));
 						evol(jp.getEvolJson(singleMehod)); 
 					}
 				}
@@ -451,7 +485,7 @@ public class method {
 					getPresentAll();
 					
 					for (int i = 0; i < 4; i++) {
-						jsonParser jp = new jsonParser(); jp.makeArray(getDeckList().substring(1));
+						jsonParser jp = new jsonParser(); jp.makeDeckArray(getDeckList().substring(1));
 						evol(jp.getEvolJson(singleMehod)); 
 					}
 				}
