@@ -509,9 +509,9 @@ public class main_ui extends JFrame implements Observer{
 		RoomInfo.setEnabled(true);
 		RoomTF.setEnabled(true);
 		HeaderCatch.setEnabled(true);
-		if(mMethod.getTitle().get(5).equals("deviceID") && mMethod.getContent().get(5).equals("000000000000000")){
+//		if(mMethod.getTitle().get(5).equals("deviceID") && mMethod.getContent().get(5).equals("000000000000000")){
 			EtherNet.setEnabled(true);
-		}
+//		}
 	}
 	
 	void btn_disable(){

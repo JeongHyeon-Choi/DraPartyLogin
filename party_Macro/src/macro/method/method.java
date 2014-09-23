@@ -29,6 +29,8 @@ public class method {
 	void classiy(String str){
 		String tmp[] = str.split("\n");
 		for (String string : tmp) {
+			String badstr = string.toLowerCase();
+			if(badstr.contains("encoding") || badstr.contains("lenght") || badstr.contains("via")) continue;
 			title.add(string.split(":")[0].trim());
 			content.add(string.split(":")[1].trim());
 		}

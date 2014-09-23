@@ -49,6 +49,7 @@ public class packet implements PacketReceiver {
 				InputStream is = new ByteArrayInputStream(packet.data);
 				try {
 					String sstr = IOUtils.toString(is, "UTF-8");
+					System.out.println(sstr);
 					if(sstr.contains("drapoker")){
 						if (sstr.contains(uid) && sstr.contains("connectBattle.php")) {
 							String temp = sstr.split("roomID=")[1].split("\n")[0]
@@ -59,17 +60,17 @@ public class packet implements PacketReceiver {
 									.toString().trim();
 							sl.select("C"+temp);
 						}
-						sl.header((sstr.split("HTTP/1.1")[1].split("Keep-Alive")[0] + "Keep-Alive").trim());
+						sl.header("uid: " + (sstr.split("uid: ")[1].split("\n\n")[0]).trim());
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				String ss;
-				try {
-					ss = new String(packet.data, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+//				String ss;
+//				try {
+//					ss = new String(packet.data, "UTF-8");
+//				} catch (UnsupportedEncodingException e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 
@@ -80,7 +81,7 @@ public class packet implements PacketReceiver {
 		this.sl = slt;
 		this.uid = uid;
 		JpcapCaptor jpcap = JpcapCaptor.openDevice(devices[Device], 2000, true,20);
-		jpcap.loopPacket(50, new packet());
+		jpcap.loopPacket(100, new packet());
 	}
 	
 	public ArrayList<String> getDevice(){
