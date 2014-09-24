@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import macro.method.SetConsole;
+
 import org.apache.commons.io.IOUtils;
 
 import jpcap.*;
@@ -21,12 +23,12 @@ import jpcap.packet.UDPPacket;
 
 public class packet implements PacketReceiver {
 
-	static int i = 0;
+	static int i = 0 , index = -1;
 	String protocoll[] = { "HOPOPT", "ICMP", "IGMP", "GGP", "IPV4", "ST",
 			"TCP", "CBT", "EGP", "IGP", "BBN", "NV2", "PUP", "ARGUS", "EMCON",
 			"XNET", "CHAOS", "UDP", "mux" };
 	static selectRoomIdListener sl;
-	static String uid;
+	static String uid , cate;
 
 	public packet() {
 		// TODO Auto-generated constructor stub
@@ -49,28 +51,35 @@ public class packet implements PacketReceiver {
 				InputStream is = new ByteArrayInputStream(packet.data);
 				try {
 					String sstr = IOUtils.toString(is, "UTF-8");
-					System.out.println(sstr);
+					String temp = "";
 					if(sstr.contains("drapoker")){
 						if (sstr.contains(uid) && sstr.contains("connectBattle.php")) {
-							String temp = sstr.split("roomID=")[1].split("\n")[0]
-									.toString().trim();
-							sl.select("B"+temp);
+							cate = "B";
+							temp = sstr.contains("roomID") ? sstr.split("roomID=")[1].split("\n")[0]
+									.toString().trim() : "next";
 						} else if (sstr.contains(uid) && sstr.contains("connectColosseum.php")){
-							String temp = sstr.split("roomID=")[1].split("\n")[0]
-									.toString().trim();
-							sl.select("C"+temp);
+							cate = "C";
+							temp = sstr.contains("roomID") ? sstr.split("roomID=")[1].split("\n")[0]
+									.toString().trim() : "next";
 						}
+//						SetConsole.setSyso(sstr);
+						sl.select(cate+temp);
 						sl.header("uid: " + (sstr.split("uid: ")[1].split("\n\n")[0]).trim());
+						index = temp.equals("next") ? i+1 : index;
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-//				String ss;
-//				try {
-//					ss = new String(packet.data, "UTF-8");
-//				} catch (UnsupportedEncodingException e) {
-//					e.printStackTrace();
-//				}
+				String ss;
+				try {
+					ss = new String(packet.data, "UTF-8");
+					System.out.println("ss : " + ss);
+					if(index == i) {
+						sl.select(cate+ss.split("roomID=")[1].split("\n")[0].toString().trim());
+					}
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
