@@ -23,7 +23,8 @@ import jpcap.packet.UDPPacket;
 
 public class packet implements PacketReceiver {
 
-	static int i = 0 , index = -1;
+	static int i = 0;
+	static boolean next = false;
 	String protocoll[] = { "HOPOPT", "ICMP", "IGMP", "GGP", "IPV4", "ST",
 			"TCP", "CBT", "EGP", "IGP", "BBN", "NV2", "PUP", "ARGUS", "EMCON",
 			"XNET", "CHAOS", "UDP", "mux" };
@@ -62,10 +63,9 @@ public class packet implements PacketReceiver {
 							temp = sstr.contains("roomID") ? sstr.split("roomID=")[1].split("\n")[0]
 									.toString().trim() : "next";
 						}
-//						SetConsole.setSyso(sstr);
 						sl.select(cate+temp);
 						sl.header("uid: " + (sstr.split("uid: ")[1].split("\n\n")[0]).trim());
-						index = temp.equals("next") ? i+1 : index;
+						next = temp.equals("next") ? true : false;
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -74,7 +74,8 @@ public class packet implements PacketReceiver {
 				try {
 					ss = new String(packet.data, "UTF-8");
 					System.out.println("ss : " + ss);
-					if(index == i) {
+					if(next && ss.contains("roomID")) {
+						next = false;
 						sl.select(cate+ss.split("roomID=")[1].split("\n")[0].toString().trim());
 					}
 				} catch (UnsupportedEncodingException e) {
