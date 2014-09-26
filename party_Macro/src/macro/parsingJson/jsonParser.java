@@ -1,6 +1,7 @@
 package macro.parsingJson;
 import java.util.ArrayList;
 
+import macro.macroInfo;
 import macro.method.SetConsole;
 import macro.method.method;
 
@@ -118,7 +119,7 @@ public class jsonParser {
 			if( isMP(mArrySelector.query("[" + i + "]").getString("cardID"))) {
 				BaseId = mArrySelector.query("[" + i + "]").getString("traCardID");
 				 ParseString = evolmethod.evolcheck(BaseId);
-				 TargetEvol = EvoljsonParser(ParseString.substring(1));
+				 TargetEvol = EvoljsonParser(macroInfo.jsonType(ParseString));
 				 if(TargetEvol.equals("ERR")){
 					 continue;
 				 } else {

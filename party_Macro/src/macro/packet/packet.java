@@ -43,8 +43,8 @@ public class packet implements PacketReceiver {
 
 			int ppp = tpt.protocol;
 			String proto = protocoll[ppp];
-			if (!tpt.dst_ip.toString().equals("/211.238.6.163"))
-				return;
+//			if (!tpt.dst_ip.toString().equals("/211.238.6.163"))
+//				return;
 
 			if (proto.equals(("TCP"))) {
 				TCPPacket tp = (TCPPacket) packet;

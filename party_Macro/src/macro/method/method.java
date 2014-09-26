@@ -8,6 +8,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import macro.macroInfo;
 import macro.parsingJson.jsonParser;
 
 public class method {
@@ -45,7 +46,7 @@ public class method {
 	public void getMissionResult(){
 		try {
 
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/getMissionResult.php");
+			URL url = new URL(macroInfo.URL + "/net/getMissionResult.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -72,7 +73,7 @@ public class method {
 	public void getPresentAll(){
 		try {
 
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/presentAll.php");
+			URL url = new URL(macroInfo.URL + "/net/presentAll.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -105,7 +106,7 @@ public class method {
 					+ URLEncoder.encode("10", "UTF-8");
 
 			// Send data
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/getGacha.php");
+			URL url = new URL(macroInfo.URL + "/net/getGacha.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -198,7 +199,7 @@ public class method {
 			SetConsole.setSyso(CardListJson);
 			
 			jsonParser jp = new jsonParser(); 
-			jp.makeCardArray(CardListJson.substring(1));
+			jp.makeCardArray(macroInfo.jsonType(CardListJson));
 			String parsingStr = strParams.equals("nop=nop") ? jp.getBCardListJson(): jp.getCCardListJson();
 			return parsingStr;
 		} catch (Exception e) {
@@ -208,7 +209,7 @@ public class method {
 	
 	public String getDeckList(){
 		try {
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/getDeckList.php");
+			URL url = new URL(macroInfo.URL + "/net/getDeckList.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -237,7 +238,7 @@ public class method {
 	}
 	
 	public void sales(String DeckListJson){
-		jsonParser jp = new jsonParser(); jp.makeDeckArray(DeckListJson.substring(1));
+		jsonParser jp = new jsonParser(); jp.makeDeckArray(macroInfo.jsonType(DeckListJson));
 		String parsingStr = jp.getSalesJson(); 
 		try {
 			// Construct data
@@ -247,7 +248,7 @@ public class method {
 					+ URLEncoder.encode("1", "UTF-8");
 
 			// Send data
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/cardSale.php");
+			URL url = new URL(macroInfo.URL + "/net/cardSale.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -273,7 +274,7 @@ public class method {
 	}
 	
 	public void enchance(String DeckListJson, String baseID){
-		jsonParser jp = new jsonParser(); jp.makeDeckArray(DeckListJson.substring(1));
+		jsonParser jp = new jsonParser(); jp.makeDeckArray(macroInfo.jsonType(DeckListJson));
 		String parsingStr = jp.getEnchanceJson(); 
 		try {
 			// Construct data
@@ -285,7 +286,7 @@ public class method {
 					+ URLEncoder.encode("1", "UTF-8");
 
 			// Send data
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/cardRnfc.php");
+			URL url = new URL(macroInfo.URL + "/net/cardRnfc.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -318,7 +319,7 @@ public class method {
 			data += "&" + URLEncoder.encode("exec", "UTF-8") + "="
 					+ URLEncoder.encode("0", "UTF-8");
 
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/cardEvol.php");
+			URL url = new URL(macroInfo.URL + "/net/cardEvol.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -363,7 +364,7 @@ public class method {
 			data += "&" + URLEncoder.encode("pushButtonID", "UTF-8") + "="
 					+ URLEncoder.encode("1", "UTF-8");
 			// Send data
-			URL url = new URL("http://drapoker.potluckgames.co.kr/net/cardEvol.php");
+			URL url = new URL(macroInfo.URL + "/net/cardEvol.php");
 			URLConnection conn = url.openConnection();
 			// If you invoke the method setDoOutput(true) on the URLConnection,
 			// it will always use the POST method.
@@ -443,7 +444,7 @@ public class method {
 					getGacha(ENHANCE);
 					
 					for (int i = 0; i < 4; i++) {
-						jsonParser jp = new jsonParser(); jp.makeDeckArray(getDeckList().substring(1));
+						jsonParser jp = new jsonParser(); jp.makeDeckArray(macroInfo.jsonType(getDeckList()));
 						evol(jp.getEvolJson(singleMehod)); 
 					}
 				}
@@ -487,7 +488,7 @@ public class method {
 					getPresentAll();
 					
 					for (int i = 0; i < 4; i++) {
-						jsonParser jp = new jsonParser(); jp.makeDeckArray(getDeckList().substring(1));
+						jsonParser jp = new jsonParser(); jp.makeDeckArray(macroInfo.jsonType(getDeckList()));
 						evol(jp.getEvolJson(singleMehod)); 
 					}
 				}

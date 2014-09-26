@@ -3,16 +3,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -31,18 +30,19 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.border.BevelBorder;
 
-import com.makeshop.android.manager.ObserverManager;
-
+import macro.macroInfo;
 import macro.method.SetConsole;
 import macro.method.method;
 import macro.packet.packet;
 import macro.packet.packet.selectRoomIdListener;
+
+import com.makeshop.android.manager.ObserverManager;
 
 public class main_ui extends JFrame implements Observer{
 	/**
@@ -76,6 +76,8 @@ public class main_ui extends JFrame implements Observer{
 	
 	JTextField InputRoom = new JTextField();
 	
+	JRadioButtonMenuItem country1, country2;
+	
 	Thread th_charg1, th_charg2, th_charg3, th_nomal, th_enchance, th_present, th_del;
 	
 	menuActionListener mMenuActionListener = new menuActionListener();
@@ -95,6 +97,29 @@ public class main_ui extends JFrame implements Observer{
 		JMenuBar mb = new JMenuBar();
 		setLayout(new BorderLayout());
 		mb.add(setMenu());
+		
+		ButtonGroup btnGroup;
+		country1=new JRadioButtonMenuItem("Korea",true);
+		country2=new JRadioButtonMenuItem("Japan");
+		btnGroup = new ButtonGroup();
+		btnGroup.add(country1);
+		btnGroup.add(country2);
+		country1.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				macroInfo.URL = macroInfo.KURL;
+			}
+		});
+		country2.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				macroInfo.URL = macroInfo.JURL;
+			}
+		});
+		
+		mb.add(country1);
+		mb.add(country2);
+		
 		setJMenuBar(mb);
 		
 		mContainer.add(setTextAreaJPanel() ,BorderLayout.CENTER);
@@ -144,7 +169,7 @@ public class main_ui extends JFrame implements Observer{
 							RoomTF.setText(str);
 							String strURL = "", strParams = "";
 							if (str.charAt(0) == 'C'){
-								strURL = "http://drapoker.potluckgames.co.kr/net/checkBattleInColosseum.php";
+								strURL = macroInfo.URL + "/net/checkBattleInColosseum.php";
 								strParams = "colosseumRoomID="+ str.substring(1);
 							} else {
 								if(str.charAt(0) == 'B'){
@@ -177,7 +202,7 @@ public class main_ui extends JFrame implements Observer{
 				if(!strHeader.equals("")) {
 					mHeaderArea.setText(strHeader);
 				}
-				String strURL = "http://drapoker.potluckgames.co.kr/net/getDeckList.php";
+				String strURL = macroInfo.URL + "/net/getDeckList.php";
 				String strParams = "nop=nop";
 				String tmp = mMethod.getCardList(strParams, strURL).trim();
 				mCardArea.setText(tmp);
@@ -240,7 +265,7 @@ public class main_ui extends JFrame implements Observer{
 	}
 	
 	JMenu setMenu(){
-		JMenu file = new JMenu( "File" );
+		JMenu file = new JMenu( "  File  " );
 		file.add(new_doc = new JMenuItem( "New" ) );
 		file.add(open = new JMenuItem( "Open" ) );
 		file.add(save = new JMenuItem( "Save" ) );
@@ -248,6 +273,7 @@ public class main_ui extends JFrame implements Observer{
 		file.add(Setting = new JMenuItem( "Set MacroInfo" ) );
 		file.addSeparator();
 		file.add(exit = new JMenuItem( "Exit",'X' ) );
+		
 		new_doc.addActionListener( mMenuActionListener );
 		open.addActionListener( mMenuActionListener );
 		save.addActionListener( mMenuActionListener );
@@ -288,9 +314,9 @@ public class main_ui extends JFrame implements Observer{
 				strSkillID = getSelectSkillID();
 				
 				if(InputRoom.getText().trim().charAt(0) == 'C'){
-					strURL = "http://drapoker.potluckgames.co.kr/net/sendColosseumCard.php";
+					strURL = macroInfo.URL + "/net/sendColosseumCard.php";
 				} else if(InputRoom.getText().trim().charAt(0) == 'B'){
-					strURL = "http://drapoker.potluckgames.co.kr/net/sendBattleCard.php";
+					strURL = macroInfo.URL + "/net/sendBattleCard.php";
 				} else {
 					SetConsole.setSyso("===ROOMID ERROR===");
 					return;
@@ -509,9 +535,9 @@ public class main_ui extends JFrame implements Observer{
 		RoomInfo.setEnabled(true);
 		RoomTF.setEnabled(true);
 		HeaderCatch.setEnabled(true);
-//		if(mMethod.getTitle().get(5).equals("deviceID") && mMethod.getContent().get(5).equals("000000000000000")){
-			EtherNet.setEnabled(true);
-//		}
+		EtherNet.setEnabled(true);
+		country1.setEnabled(true);
+		country2.setEnabled(true);
 	}
 	
 	void btn_disable(){
@@ -527,11 +553,15 @@ public class main_ui extends JFrame implements Observer{
 		Del.setEnabled(false);
 		HeaderCatch.setEnabled(false);
 		EtherNet.setEnabled(false);
+		country1.setEnabled(false);
+		country2.setEnabled(false);
 	}
 	
 	protected boolean isRunable(JButton jbtn){
 		if(jbtn.getBackground().equals(new Color(238, 238, 238))){
 			jbtn.setBackground(Color.RED);
+			country1.setEnabled(false);
+			country2.setEnabled(false);
 			return true;
 		}
 		jbtn.setBackground(new Color(238, 238, 238));
