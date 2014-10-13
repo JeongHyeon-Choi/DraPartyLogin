@@ -138,7 +138,7 @@ public class method {
 			String data = URLEncoder.encode("roomID", "UTF-8") + "="
 					+ URLEncoder.encode(strRoomID, "UTF-8");				
 			data += "&" + URLEncoder.encode("traCardID", "UTF-8") + "="
-					+ URLEncoder.encode(strCardID, "UTF-8") + "&turnCount=";
+					+ URLEncoder.encode(strCardID, "UTF-8") + "&turnCount=1";
 			data += strSkillID.equals("") ? "" : "&" + URLEncoder.encode("useCardGauge", "UTF-8") + "="
 					+ URLEncoder.encode(strSkillID, "UTF-8");
 
@@ -149,7 +149,10 @@ public class method {
 			// it will always use the POST method.
 			conn.setDoOutput(true);
 			setHeader(conn);
-
+			conn.addRequestProperty("Content-Length", data.length()+"");
+			System.out.println(data.length()+"::::::::::::::::::::::::"+data);
+			System.out.println(data.trim().length()+":::::::::::trim:::::::::::::"+data);
+			
 			OutputStreamWriter wr = new OutputStreamWriter(
 					conn.getOutputStream());
 			wr.write(data);

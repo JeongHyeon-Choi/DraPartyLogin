@@ -56,14 +56,18 @@ public class packet implements PacketReceiver {
 					if(sstr.contains("drapoker")){
 						if (sstr.contains(uid) && sstr.contains("connectBattle.php")) {
 							cate = "B";
-							temp = sstr.contains("roomID") ? sstr.split("roomID=")[1].split("\n")[0]
+							temp = sstr.toLowerCase().contains("roomid=") ? sstr.toLowerCase().split("roomid=")[1].split("\n")[0]
 									.toString().trim() : "next";
 						} else if (sstr.contains(uid) && sstr.contains("connectColosseum.php")){
 							cate = "C";
-							temp = sstr.contains("roomID") ? sstr.split("roomID=")[1].split("\n")[0]
+							temp = sstr.toLowerCase().contains("roomid=") ? sstr.toLowerCase().split("roomid=")[1].split("\n")[0]
 									.toString().trim() : "next";
+									System.out.println("temp ============================= " + temp);
 						}
-						sl.select(cate+temp);
+						if((cate+temp).length() > 5){
+							sl.select(cate+temp);
+							System.out.println("제대로 되다.");//
+						}
 						sl.header("uid: " + (sstr.split("uid: ")[1].split("\n\n")[0]).trim());
 						next = temp.equals("next") ? true : false;
 					}
@@ -74,9 +78,9 @@ public class packet implements PacketReceiver {
 				try {
 					ss = new String(packet.data, "UTF-8");
 					System.out.println("ss : " + ss);
-					if(next && ss.contains("roomID")) {
+					if(next && ss.toLowerCase().contains("roomid=")) {
 						next = false;
-						sl.select(cate+ss.split("roomID=")[1].split("\n")[0].toString().trim());
+						sl.select(cate+ss.toLowerCase().split("roomid=")[1].split("\n")[0].toString().trim());
 					}
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();

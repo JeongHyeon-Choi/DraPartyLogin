@@ -171,6 +171,7 @@ public class main_ui extends JFrame implements Observer{
 							if (str.charAt(0) == 'C'){
 								strURL = macroInfo.URL + "/net/checkBattleInColosseum.php";
 								strParams = "colosseumRoomID="+ str.substring(1);
+								SetConsole.setSyso("===IN COLOSSEUM ROOM===");
 							} else {
 								if(str.charAt(0) == 'B'){
 									SetConsole.setSyso("===IN BATTLE ROOM===");
